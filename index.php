@@ -1,4 +1,14 @@
 <!DOCTYPE html>
+<?php
+//links for the models file and database connection
+require_once "includes/connection.inc.php";
+require_once "includes/models/main_model.php";
+
+//assigning counts to specific variables from different functions from models file
+$user = user_count($pdo);
+$departments = department_count($pdo);
+$device = device_count($pdo);
+?>
 <html lang="en">
 
 <head>
@@ -17,6 +27,9 @@
   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
+  <!-- font awesome cdn link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -29,13 +42,6 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -70,7 +76,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " href="index.php">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -82,12 +88,17 @@
         </a>
         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="pages-register.html">
+            <a href="pages-register.php">
               <i class="bi bi-circle"></i><span>Register User</span>
             </a>
           </li>
           <li>
-            <a href="pages-Devices-list.html">
+            <a href="pages-add-device.php">
+              <i class="bi bi-circle"></i><span>Add new device</span>
+            </a>
+          </li>
+          <li>
+            <a href="pages-devices-table.php">
               <i class="bi bi-circle"></i><span>View devices</span>
             </a>
           </li>
@@ -174,10 +185,10 @@
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <!-- <i class="bi bi-cart"></i> -->
+                      <i class="fa-solid fa-tachograph-digital" style="color: #63E6BE;"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>145</h6>
+                      <h6><?php echo $device; ?></h6>
                       <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                     </div>
@@ -196,10 +207,10 @@
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <!-- <i class="bi bi-currency-dollar"></i> -->
+                      <i class="fa-solid fa-briefcase" style="color: #74C0FC;"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>6</h6>
+                      <h6><?php echo $departments; ?></h6>
                       <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                     </div>
@@ -210,103 +221,101 @@
             </div><!-- End Department Card -->
 
             <!-- Users Card -->
-            <div class="col-xxl-4 col-xl-12">
-
-              <div class="card info-card customers-card">
-                <div class="card-body">
-                  <h5 class="card-title">Users</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>100</h6>
-                      <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
-
+            <!-- card with a link to the users list -->
+            <a href="pages-users-table.php">
+              <div class="col-xxl-4 col-xl-12">
+                <div class="card info-card customers-card">
+                  <div class="card-body">
+                    <h5 class="card-title">Users</h5>
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                        <i class="bi bi-people"></i>
+                      </div>
+                      <div class="ps-3">
+                        <h6><?php echo $user; ?></h6>
+                        <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
+                      </div>
                     </div>
                   </div>
-
                 </div>
               </div>
-
-            </div><!-- End Users Card -->
+            </a><!-- End Users Card -->
 
             <!-- Recent Sales -->
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
 
-        <!-- Right side columns -->
-        <div class="col-lg-4">
+                <!-- Right side columns -->
+                <div class="col-lg-4">
 
-          <!-- Devices statistics -->
-          <div class="card">
-            <div class="card-body pb-0">
-              <h5 class="card-title">Devices statistics</h5>
+                  <!-- Devices statistics -->
+                  <div class="card">
+                    <div class="card-body pb-0">
+                      <h5 class="card-title">Devices statistics</h5>
 
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+                      <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
 
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                      trigger: 'item'
-                    },
-                    legend: {
-                      top: '5%',
-                      left: 'center'
-                    },
-                    series: [{
-                      name: 'Access From',
-                      type: 'pie',
-                      radius: ['40%', '70%'],
-                      avoidLabelOverlap: false,
-                      label: {
-                        show: false,
-                        position: 'center'
-                      },
-                      emphasis: {
-                        label: {
-                          show: true,
-                          fontSize: '18',
-                          fontWeight: 'bold'
-                        }
-                      },
-                      labelLine: {
-                        show: false
-                      },
-                      data: [{
-                          value: 60,
-                          name: 'Computers'
-                        },
-                        {
-                          value: 15,
-                          name: 'Printers'
-                        },
-                        {
-                          value: 70,
-                          name: 'Monitors'
-                        },
-                        {
-                          value: 3,
-                          name: 'Scanners'
-                        },
-                        // {
-                        //   value: 300,
-                        //   name: 'Video Ads'
-                        // }
-                      ]
-                    }]
-                  });
-                });
-              </script>
+                      <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                          echarts.init(document.querySelector("#trafficChart")).setOption({
+                            tooltip: {
+                              trigger: 'item'
+                            },
+                            legend: {
+                              top: '5%',
+                              left: 'center'
+                            },
+                            series: [{
+                              name: 'Access From',
+                              type: 'pie',
+                              radius: ['40%', '70%'],
+                              avoidLabelOverlap: false,
+                              label: {
+                                show: false,
+                                position: 'center'
+                              },
+                              emphasis: {
+                                label: {
+                                  show: true,
+                                  fontSize: '18',
+                                  fontWeight: 'bold'
+                                }
+                              },
+                              labelLine: {
+                                show: false
+                              },
+                              data: [{
+                                  value: 60,
+                                  name: 'Computers'
+                                },
+                                {
+                                  value: 15,
+                                  name: 'Printers'
+                                },
+                                {
+                                  value: 70,
+                                  name: 'Monitors'
+                                },
+                                {
+                                  value: 3,
+                                  name: 'Scanners'
+                                },
+                                // {
+                                //   value: 300,
+                                //   name: 'Video Ads'
+                                // }
+                              ]
+                            }]
+                          });
+                        });
+                      </script>
 
-            </div>
-          </div><!-- End Devices statistics -->
+                    </div>
+                  </div><!-- End Devices statistics -->
 
-        </div><!-- End Right side columns -->
+                </div><!-- End Right side columns -->
 
-      </div>
+              </div>
     </section>
 
   </main><!-- End #main -->
